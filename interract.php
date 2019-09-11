@@ -98,7 +98,7 @@ if ($command == "login")
     update_users();
     // gets pseudo and pseudo for everyone
     $pseudo = $_POST['pseudo'];
-    $eveyone = $_POST['everyone'];
+    $everyone = $_POST['everyone'];
 
     // gets database
     $data = read_file("data.json");
