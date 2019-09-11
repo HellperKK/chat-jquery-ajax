@@ -1,0 +1,8 @@
+.alert {
+    color: red;
+    display: inline;
+}
+
+.whisper {
+    font-style: italic;
+}
