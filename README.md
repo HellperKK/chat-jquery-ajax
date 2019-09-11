@@ -1,5 +1,5 @@
 # chat-jqury-ajax
-A small chatt with jquery and ajax
+A small chat with jquery and ajax
 
 ## Concept
 This is a tiny chat made using jquery and ajax to test both technologies.
