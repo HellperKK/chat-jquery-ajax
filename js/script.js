@@ -98,6 +98,24 @@ function logout() {
 }
 
 /**
+ * Tries to deletes a message based of if index and the
+ */
+function deleteMessage() {
+
+    let pseudo = $("#pseudo").val();
+    let index = $("#content").prop("selectedIndex");
+
+    $.post('interract.php', {
+            command: "deleteMessage",
+            index,
+            pseudo 
+        },
+        // fetch server when is completed
+        readServer
+    );
+}
+
+/**
  * creates the chat part and removes the login part
  */
 function openChat(pseudo) {
@@ -112,11 +130,17 @@ function openChat(pseudo) {
     let chat = $("#chatDiv");
 
     // appends the select for chat messages
-    chat.append($("<select/>", {
+    let content = $("<select/>", {
         id : "content",
         size : 15,
         style : "width: 80%;"
-    }));
+    });
+    content.on("keydown", function(event) {
+        if (event.code == "Delete") {
+            deleteMessage();
+        }
+    });
+    chat.append(content);
 
     // appends the user list
     chat.append($("<select/>", {
@@ -198,7 +222,7 @@ function closeChat() {
     // and appends it
     let entree = $("<input/>", {
         id : "pseudoLog",
-        placeholder : "pseudonyme",
+        placeholder : "pseudonym",
         type : "text"
     });
     entree.on("keypress", function(event) {
@@ -261,6 +285,12 @@ function readServer() {
             // gets chat and users select
             let select = $("#content");
             let users = $("#logged");
+            
+            // gets content selected index and changes it to 0 if no user selected
+            indexContent = select.prop("selectedIndex");
+            if (indexContent == -1) {
+                indexContent = 0;
+            }
 
             // gets users selected index and changes it to 0 if no user selected
             index = users.prop("selectedIndex");
@@ -286,7 +316,9 @@ function readServer() {
                 // option with the whisper class (to put it in italic)
                 if (elem.target == pseudo) {
                     let message = elem.date + " | " + elem.pseudo + " whispers " + " : " + elem.message;
+                    let val = JSON.stringify(elem);
                     line = $("<option/>", {
+                        value: val,
                         text: message,
                         class: "whisper"
                     });
@@ -302,6 +334,10 @@ function readServer() {
                 // appends the option to the select
                 select.append(line);
             }
+
+            // resets the user selection
+            select.prop("selectedIndex", indexContent);
+
 
             // adds the All user to the user list
             users.append($("<option/>", {text: toAllLogged}));

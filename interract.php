@@ -224,3 +224,28 @@ else if ($command == "clearChat")
     // saves database
     write_file('data.json', $data);
 }
+// when user deletes one of his messages
+else if ($command == "deleteMessage")
+{
+    update_users();
+
+    // gets user pseudo and message index
+    $pseudo = $_POST['pseudo'];
+    $index = $_POST['index'];
+
+    // gets database
+    $data = read_file("data.json");
+
+    // removes message at index if its sender is $pseudo
+    if ($data["messages"][$index]["pseudo"] == $pseudo)
+    {
+        // removes message
+        unset($data["messages"][$index]);
+
+        // clears messages
+        $data["messages"] = array_values($data["messages"]);
+
+        // saves database
+        write_file('data.json', $data);
+    }
+}

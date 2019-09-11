@@ -14,6 +14,7 @@ Also it uses the localstorage to keep a user connected when they refresh so ther
 - Clean al the messages (warning, cleans them from the database)
 - See all the connected users in the left.
 - Select a user in that list to send them a private message. (Or select All for public message).
+- Delete a public message by selecting it and pressing the delete key
 - When a user disconnects all the private messages sent to them are discarded.
 
 ## How to use
