@@ -17,7 +17,7 @@ Also it uses the localstorage to keep a user connected when they refresh so ther
 - When a user disconnects all the private messages sent to them are discarded.
 
 ## How to use
-Clone the repository.
-Run a php web server so that it can interpret the files in the folder.
-Open index.html through localhost.
-Try with more than one browser to see stuff happen !
+- Clone the repository.
+- Run a php web server so that it can interpret the files in the folder.
+- Open index.html through localhost.
+- Try with more than one browser to see stuff happen !
