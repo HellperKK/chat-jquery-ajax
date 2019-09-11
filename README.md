@@ -13,7 +13,7 @@ Also it uses the localstorage to keep a user connected when they refresh so ther
 - Disconnect with a button or after 5 minutes of inactivity.
 - Clean al the messages (warning, cleans them from the database)
 - See all the connected users in the left.
-- Select a user in that list to send him a private message. (Or select All for public message).
+- Select a user in that list to send them a private message. (Or select All for public message).
 - When a user disconnects all the private messages sent to them are discarded.
 
 ## How to use
