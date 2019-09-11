@@ -5,8 +5,8 @@
  */
 function validate_data($data) {
     return is_array($data["users"]) && 
-    is_array($data["messages"]) &&
-    is_array($data["times"]);
+        is_array($data["messages"]) &&
+        is_array($data["times"]);
 }
 
 /**
@@ -92,7 +92,7 @@ function update_users() {
 // gets the command to execute
 $command = $_POST['command'];
 
-// user login
+// when user login
 if ($command == "login")
 {
     update_users();
@@ -121,17 +121,17 @@ if ($command == "login")
         echo "1";
     }
 }
-// send message
+// when user send message
 else if ($command == "send")
 {
     update_users();
 
-    // get datas
+    // gets pseudo message and target
     $nom = $_POST['pseudo'];
     $message = $_POST['message'];
     $target = $_POST['target'];
 
-    // build message object
+    // builds message object
     $message_object = [
         "date" => date('M d H:i:s'),
         "pseudo" => $nom,
@@ -139,7 +139,7 @@ else if ($command == "send")
         "target" => $target,
     ];
 
-    // get database
+    // gets database
     $data = read_file("data.json");
 
     // adds message to database
@@ -151,24 +151,40 @@ else if ($command == "send")
     // saves database
     write_file('data.json', $data);
 }
+// when user fetch data
 else if ($command == "update")
 {
+    update_users();
+
+    // gets database
     $data = read_file("data.json");
+
+    // remove data that is useless to send
     unset($data["times"]);
-    //$data["messages"] = array_slice($data["messages"], 0, 40);
+
+    // sends data
     echo json_encode($data);
 }
+// when user logs out
 else if ($command == "logout")
 {
+    // gets pseudo dan database
     $pseudo = $_POST['pseudo'];
     $data = read_file("data.json");
+
+    //  removes user from database
     remove_user($data, $pseudo);
 }
+// when user checks if they have been disconnected by timeout
 else if ($command == "check")
 {
     update_users();
+
+    // gets pseudo dan database
     $pseudo = $_POST['pseudo'];
     $data = read_file("data.json");
+
+    // sends 0 or 1 to tell if the user is still in the database and thus connected
     if (in_array($pseudo, $data["users"]))
     {
         echo "0";
@@ -178,10 +194,17 @@ else if ($command == "check")
         echo "1";
     }
 }
+// when user clears the chat
 else if ($command == "clearChat")
 {
     update_users();
+
+    // gets database
     $data = read_file("data.json");
+
+    // clears messages
     $data["messages"] = [];
+
+    // saves database
     write_file('data.json', $data);
 }
