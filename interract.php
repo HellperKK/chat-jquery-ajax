@@ -96,12 +96,15 @@ $command = $_POST['command'];
 if ($command == "login")
 {
     update_users();
-    // get pseudonyme and database
+    // gets pseudo and pseudo for everyone
     $pseudo = $_POST['pseudo'];
+    $eveyone = $_POST['everyone'];
+
+    // gets database
     $data = read_file("data.json");
 
-    //tells if the unsername is already used by sending 0 or 1
-    if (in_array($pseudo, $data["users"]))
+    //tells if the unsername is already used or forbidden by sending 0 or 1
+    if (in_array($pseudo, $data["users"]) || ($pseudo == $everyone))
     {
         echo "0";
     }
@@ -156,11 +159,24 @@ else if ($command == "update")
 {
     update_users();
 
+    // gets the pseudo and the special pseudo for everyone
+    $pseudo = $_POST['pseudo'];
+    $everyone = $_POST['everyone'];
+
     // gets database
     $data = read_file("data.json");
 
     // remove data that is useless to send
     unset($data["times"]);
+
+    // filters messages not to send messages private to someone else
+    $new_messages = [];
+    foreach ($data["messages"] as $message) {
+        if (($message["target"] == $pseudo) || ($message["target"] == $everyone)) {
+            $new_messages[] = $message;
+        }
+    }
+    $data["messages"] = $new_messages;
 
     // sends data
     echo json_encode($data);

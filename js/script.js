@@ -60,7 +60,8 @@ function login() {
     // send pseudo to server and gets a response
     $.post('interract.php', {
             command: "login",
-            pseudo
+            pseudo,
+            everyone : toAllLogged
         },
         function(data) {
 
@@ -71,7 +72,7 @@ function login() {
 
             // else alerts the user thatthe pseudo is already used
             else {
-                $("#alertLog").html("Pseudo en cours d'utilisation")
+                $("#alertLog").html("Pseudo already used or forbidden")
             }
         }
     );
@@ -246,18 +247,21 @@ function autoLogout() {
  * fetches server for new data that should be inserted in the document
  */
 function readServer() {
+    // gets pseudo
+    let pseudo = $("#pseudo").val();
 
-    //send request to the server with no data (other than the command)
-    $.post('interract.php', {command:"update"},
+    // sends request to the server with the user pseudo and the pseudo for everyone
+    $.post('interract.php', {
+        command:"update",
+        pseudo,
+        everyone : toAllLogged
+        },
         function(data, status, xhr) {
 
             // gets chat and users select
             let select = $("#content");
             let users = $("#logged");
 
-            // gets pseudo
-            let pseudo = $("#pseudo").val();
-            
             // gets users selected index and changes it to 0 if no user selected
             index = users.prop("selectedIndex");
             if (index == -1) {
@@ -270,9 +274,6 @@ function readServer() {
             
             // gets the messages from the data response
             let messages = JSON.parse(data)["messages"]
-
-                // filters to keep public messages and personnal ones
-                .filter(message => (message.target == toAllLogged) || (message.target == pseudo))
 
                 // keep only the 15 last messages
                 .slice(0, 15);
